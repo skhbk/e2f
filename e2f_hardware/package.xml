@@ -9,7 +9,13 @@
 
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
 
+  <depend>control_toolbox</depend>
+  <depend>dynamixel_workbench_toolbox</depend>
   <depend>e2f_description</depend>
+  <depend>hardware_interface</depend>
+  <depend>kdl_parser</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

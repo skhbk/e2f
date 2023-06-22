@@ -1,0 +1,9 @@
+<library path="e2f_hardware">
+  <class name="e2f_hardware/E2FHardwareInterface"
+    type="e2f_hardware::E2FHardwareInterface"
+    base_class_type="hardware_interface::SystemInterface">
+    <description>
+      System interface for E2F gripper.
+    </description>
+  </class>
+</library>
