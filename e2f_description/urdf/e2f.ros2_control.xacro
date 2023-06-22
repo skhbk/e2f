@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="e2f">
+  <xacro:macro name="e2f_ros2_control"
+    params="
+      name
+      tf_prefix
+      use_fake_hardaware
+      device_name
+      baud_rate
+      dynamixel_id
+      spring_constant
+      active_joint_offset
+      filter_coefficient
+      "
+  >
+    <ros2_control name="${name}" type="system">
+      <!-- Plugins -->
+      <hardware>
+        <xacro:unless value="${use_fake_hardware}">
+          <plugin>e2f_hardware/E2FHardwareInterface</plugin>
+          <param name="tf_prefix">${tf_prefix}</param>
+          <param name="device_name">${device_name}</param>
+          <param name="baud_rate">${baud_rate}</param>
+          <param name="dynamixel_id">${dynamixel_id}</param>
+          <param name="spring_constant">${spring_constant}</param>
+          <param name="active_joint_offset">${active_joint_offset}</param>
+          <param name="filter_coefficient">${filter_coefficient}</param>
+        </xacro:unless>
+        <xacro:if value="${use_fake_hardware}">
+          <plugin>mock_components/GenericSystem</plugin>
+        </xacro:if>
+      </hardware>
+
+      <!-- Joint interfaces -->
+      <joint name="${tf_prefix}active_joint">
+        <state_interface name="position">
+          <param name="initial_value">0.0</param>
+        </state_interface>
+      </joint>
+      <joint name="${tf_prefix}passive_l_joint">
+        <state_interface name="position">
+          <param name="initial_value">0.0</param>
+        </state_interface>
+      </joint>
+      <joint name="${tf_prefix}passive_r_joint">
+        <state_interface name="position">
+          <param name="initial_value">0.0</param>
+        </state_interface>
+      </joint>
+      <xacro:unless value="${use_fake_hardware}">
+        <gpio name="${tf_prefix}stroke">
+          <command_interface name="position" />
+          <state_interface name="position" />
+          <state_interface name="effort" />
+        </gpio>
+      </xacro:unless>
+    </ros2_control>
+  </xacro:macro>
+</robot>

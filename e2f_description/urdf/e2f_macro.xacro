@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="e2f">
+  <xacro:macro name="e2f"
+    params="
+      name
+      tf_prefix
+      use_fake_hardware:=false
+      device_name:=/dev/ttyUSB0
+      baud_rate:=57600
+      dynamixel_id:=1
+      spring_constant:=12.0
+      active_joint_offset:=0.03
+      filter_coefficient:=0.2"
+  >
+    <!-- ros2_control -->
+    <xacro:include filename="$(find e2f_description)/urdf/e2f.ros2_control.xacro" />
+    <xacro:e2f_ros2_control
+      name="${name}"
+      tf_prefix="${tf_prefix}"
+      use_fake_hardaware="${use_fake_hardware}"
+      device_name="${device_name}"
+      baud_rate="${baud_rate}"
+      dynamixel_id="${dynamixel_id}"
+      spring_constant="${spring_constant}"
+      active_joint_offset="${active_joint_offset}"
+      filter_coefficient="${filter_coefficient}"
+    />
+
+    <xacro:property name="description_package" value="$(find e2f_description)" />
+
+    <link name="${tf_prefix}base_link">
+      <visual>
+        <geometry>
+          <mesh filename="file://${description_package}/meshes/visual/base_link.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://${description_package}/meshes/collision/base_link.stl" />
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${tf_prefix}gear_l">
+      <visual>
+        <geometry>
+          <mesh filename="file://${description_package}/meshes/visual/gear_l.dae" />
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="${tf_prefix}gear_r">
+      <visual>
+        <geometry>
+          <mesh filename="file://${description_package}/meshes/visual/gear_r.dae" />
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="${tf_prefix}link1_l">
+      <visual>
+        <geometry>
+          <mesh filename="file://${description_package}/meshes/visual/link1_l.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://${description_package}/meshes/collision/link1_l.stl" />
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${tf_prefix}link1_r">
+      <visual>
+        <geometry>
+          <mesh filename="file://${description_package}/meshes/visual/link1_r.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://${description_package}/meshes/collision/link1_r.stl" />
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${tf_prefix}link2_l">
+      <visual>
+        <geometry>
+          <mesh filename="file://${description_package}/meshes/visual/link2_l.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://${description_package}/meshes/collision/link2_l.stl" />
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${tf_prefix}link2_r">
+      <visual>
+        <geometry>
+          <mesh filename="file://${description_package}/meshes/visual/link2_r.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://${description_package}/meshes/collision/link2_r.stl" />
+        </geometry>
+      </collision>
+    </link>
+
+
+    <link name="${tf_prefix}link3_l">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 ${pi}" />
+        <geometry>
+          <mesh filename="file://${description_package}/meshes/visual/link3.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 ${pi}" />
+        <geometry>
+          <mesh filename="file://${description_package}/meshes/collision/link3.stl" />
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${tf_prefix}link3_r">
+      <visual>
+        <geometry>
+          <mesh filename="file://${description_package}/meshes/visual/link3.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://${description_package}/meshes/collision/link3.stl" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${tf_prefix}active_joint" type="continuous">
+      <parent link="${tf_prefix}base_link" />
+      <child link="${tf_prefix}gear_r" />
+      <origin xyz="-0.016 0.0125 0.035" rpy="0 0 0" />
+      <axis xyz="0 1 0" />
+    </joint>
+
+
+    <joint name="${tf_prefix}passive_l_joint" type="continuous">
+      <parent link="${tf_prefix}base_link" />
+      <child link="${tf_prefix}link2_l" />
+      <origin xyz="0.040 0 0.030" rpy="0 0 0" />
+      <axis xyz="0 -1 0" />
+    </joint>
+
+    <joint name="${tf_prefix}passive_r_joint" type="continuous">
+      <parent link="${tf_prefix}base_link" />
+      <child link="${tf_prefix}link2_r" />
+      <origin xyz="-0.040 0 0.030" rpy="0 0 0" />
+      <axis xyz="0 1 0" />
+    </joint>
+
+    <joint name="${tf_prefix}base_gear_l_joint" type="continuous">
+      <parent link="${tf_prefix}base_link" />
+      <child link="${tf_prefix}gear_l" />
+      <origin xyz="0.016 0.0125 0.035" rpy="0 0 0" />
+      <axis xyz="0 -1 0" />
+      <mimic joint="${tf_prefix}active_joint" />
+    </joint>
+
+    <joint name="${tf_prefix}base_link1_l_joint" type="continuous">
+      <parent link="${tf_prefix}base_link" />
+      <child link="${tf_prefix}link1_l" />
+      <origin xyz="0.016 0 0.035" rpy="0 0 0" />
+      <axis xyz="0 -1 0" />
+      <mimic joint="${tf_prefix}passive_l_joint" />
+    </joint>
+
+    <joint name="${tf_prefix}base_link1_r_joint" type="continuous">
+      <parent link="${tf_prefix}base_link" />
+      <child link="${tf_prefix}link1_r" />
+      <origin xyz="-0.016 0 0.035" rpy="0 0 0" />
+      <axis xyz="0 1 0" />
+      <mimic joint="${tf_prefix}passive_r_joint" />
+    </joint>
+
+    <joint name="${tf_prefix}link1_link3_l_joint" type="continuous">
+      <parent link="${tf_prefix}link1_l" />
+      <child link="${tf_prefix}link3_l" />
+      <origin xyz="0.054 0 0.07816" rpy="0 0 0" />
+      <axis xyz="0 -1 0" />
+      <mimic joint="${tf_prefix}passive_l_joint" multiplier="-1" />
+    </joint>
+
+    <joint name="${tf_prefix}link1_link3_r_joint" type="continuous">
+      <parent link="${tf_prefix}link1_r" />
+      <child link="${tf_prefix}link3_r" />
+      <origin xyz="-0.054 0 0.07816" rpy="0 0 0" />
+      <axis xyz="0 1 0" />
+      <mimic joint="${tf_prefix}passive_r_joint" multiplier="-1" />
+    </joint>
+
+    <!-- Fingertip links -->
+    <link name="${tf_prefix}fingertip_l" />
+    <joint name="${tf_prefix}fingertip_l_joint" type="fixed">
+      <parent link="${tf_prefix}link3_l" />
+      <child link="${tf_prefix}fingertip_l" />
+      <origin xyz="-8e-3 0 17e-3" rpy="0 0 ${pi}" />
+    </joint>
+    <link name="${tf_prefix}fingertip_r" />
+    <joint name="${tf_prefix}fingertip_r_joint" type="fixed">
+      <parent link="${tf_prefix}link3_r" />
+      <child link="${tf_prefix}fingertip_r" />
+      <origin xyz="8e-3 0 17e-3" rpy="0 0 0" />
+    </joint>
+
+  </xacro:macro>
+</robot>

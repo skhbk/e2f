@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="e2f">
+  <!-- Parameters -->
+  <xacro:arg name="tf_prefix" default="e2f_" />
+  <xacro:arg name="use_fake_hardware" default="true" />
+  <xacro:arg name="device_name" default="/dev/ttyUSB0" />
+  <xacro:arg name="baud_rate" default="57600" />
+  <xacro:arg name="dynamixel_id" default="1" />
+
+  <xacro:include filename="$(find e2f_description)/urdf/e2f_macro.xacro" />
+  <xacro:e2f
+    name="e2f"
+    tf_prefix="$(arg tf_prefix)"
+    use_fake_hardware="$(arg use_fake_hardware)"
+    device_name="$(arg device_name)"
+    baud_rate="$(arg baud_rate)"
+    dynamixel_id="$(arg dynamixel_id)"
+  />
+
+  <link name="world" />
+
+  <joint name="$(arg tf_prefix)base_joint" type="fixed">
+    <parent link="world" />
+    <child link="$(arg tf_prefix)base_link" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+</robot>
