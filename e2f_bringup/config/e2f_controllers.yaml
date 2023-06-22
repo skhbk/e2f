@@ -1,0 +1,13 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    gripper_command_controller:
+      type: e2f_controllers/GripperCommandController
+
+gripper_command_controller:
+  ros__parameters:
+    joint: e2f_stroke

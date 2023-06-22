@@ -9,6 +9,7 @@
 
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
 
+  <depend>e2f_controllers</depend>
   <depend>e2f_description</depend>
   <depend>e2f_hardware</depend>
 
