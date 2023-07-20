@@ -1,0 +1,11 @@
+e2f_controllers::gripper_command_controller:
+  joint: { type: string }
+
+  position_tolerance: { type: double, default_value: 0.005 }
+  effort_tolerance: { type: double, default_value: 0.2 }
+
+  pid:
+    p: { type: double, default_value: 0.01 }
+    i: { type: double, default_value: 0.05 }
+    d: { type: double, default_value: 0.0 }
+    i_clamp: { type: double, default_value: 1.0 }

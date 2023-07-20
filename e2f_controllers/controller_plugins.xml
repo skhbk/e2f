@@ -1,0 +1,9 @@
+<library path="e2f_controllers">
+    <class name="e2f_controllers/GripperCommandController"
+        type="e2f_controllers::GripperCommandController"
+        base_class_type="controller_interface::ControllerInterface">
+        <description>
+            Gripper command controller for E2F gripper.
+        </description>
+    </class>
+</library>
