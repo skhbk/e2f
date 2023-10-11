@@ -49,9 +49,9 @@
       </joint>
       <xacro:unless value="${use_fake_hardware}">
         <gpio name="${tf_prefix}stroke">
-          <command_interface name="position" />
-          <state_interface name="position" />
-          <state_interface name="effort" />
+          <command_interface name="width" />
+          <state_interface name="width" />
+          <state_interface name="force" />
         </gpio>
       </xacro:unless>
     </ros2_control>

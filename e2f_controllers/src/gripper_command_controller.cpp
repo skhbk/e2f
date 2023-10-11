@@ -34,15 +34,14 @@ InterfaceConfiguration GripperCommandController::command_interface_configuration
 {
   return {
     controller_interface::interface_configuration_type::INDIVIDUAL,
-    {params_.joint + "/" + hardware_interface::HW_IF_POSITION}};
+    {params_.joint + "/" + "width"}};
 }
 
 InterfaceConfiguration GripperCommandController::state_interface_configuration() const
 {
   return {
     controller_interface::interface_configuration_type::INDIVIDUAL,
-    {params_.joint + "/" + hardware_interface::HW_IF_POSITION,
-     params_.joint + "/" + hardware_interface::HW_IF_EFFORT}};
+    {params_.joint + "/" + "width", params_.joint + "/" + "force"}};
 }
 
 CallbackReturn GripperCommandController::on_configure(
