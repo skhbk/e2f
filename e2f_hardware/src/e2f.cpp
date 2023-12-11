@@ -87,7 +87,7 @@ std::map<JointName, double> E2F::read()
     if (!dxl_wb_.itemRead(id_, "External_Port_Data_2", &data)) {
       throw std::runtime_error("Failed to read External_Port_Data_2");
     }
-    positions[JointName::PASSIVE_L] = data * gain + bias;
+    positions[JointName::PASSIVE_L] = -data * gain - bias;
 
     if (!dxl_wb_.itemRead(id_, "External_Port_Data_1", &data)) {
       throw std::runtime_error("Failed to read External_Port_Data_1");
