@@ -47,6 +47,11 @@
           <param name="initial_value">0.0</param>
         </state_interface>
       </joint>
+      <joint name="${tf_prefix}tcp_joint">
+        <state_interface name="position">
+          <param name="initial_value">0.13</param>
+        </state_interface>
+      </joint>
       <xacro:unless value="${use_fake_hardware}">
         <gpio name="${tf_prefix}stroke">
           <command_interface name="width" />

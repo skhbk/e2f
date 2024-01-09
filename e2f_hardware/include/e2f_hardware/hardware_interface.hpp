@@ -36,6 +36,7 @@ class E2FHardwareInterface : public hardware_interface::SystemInterface
   std::map<JointName, double> joint_positions_;
   double stroke_position_, stroke_effort_;
   double stroke_position_command_;
+  double tcp_position_;
 
   std::vector<std::shared_ptr<KDL::Chain>> chains_;
   std::vector<KDL::ChainFkSolverPos_recursive> fk_pos_solvers_;

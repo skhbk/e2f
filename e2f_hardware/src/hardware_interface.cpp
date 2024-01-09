@@ -86,6 +86,10 @@ std::vector<hardware_interface::StateInterface> E2FHardwareInterface::export_sta
   state_interfaces.emplace_back(tf_prefix + "stroke", "width", &stroke_position_);
   state_interfaces.emplace_back(tf_prefix + "stroke", "force", &stroke_effort_);
 
+  // TCP interface
+  state_interfaces.emplace_back(
+    tf_prefix + "tcp_joint", hardware_interface::HW_IF_POSITION, &tcp_position_);
+
   return state_interfaces;
 }
 
@@ -155,7 +159,7 @@ return_type E2FHardwareInterface::read(
     return return_type::ERROR;
   }
 
-  // Stroke position
+  // Stroke and TCP positions
   {
     std::array<JointName, 2> joint_names{JointName::PASSIVE_L, JointName::PASSIVE_R};
     std::array<KDL::Frame, 2> frames;
@@ -168,6 +172,7 @@ return_type E2FHardwareInterface::read(
     }
 
     stroke_position_ = frames[0].p.x() - frames[1].p.x();
+    tcp_position_ = (frames[0].p.z() + frames[1].p.z()) / 2;
   }
 
   // Stroke effort
