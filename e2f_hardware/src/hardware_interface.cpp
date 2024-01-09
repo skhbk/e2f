@@ -211,7 +211,7 @@ double E2FHardwareInterface::compute_force(double actuator_position, double link
 double E2FHardwareInterface::stroke_ik(double stroke)
 {
   // Compute stroke of initial position
-  double reference_stroke;
+  double reference_stroke = 0;
   for (size_t i = 0; i < 2; ++i) {
     KDL::JntArray q;
     q.data = Eigen::Vector2d{0., 0.};
