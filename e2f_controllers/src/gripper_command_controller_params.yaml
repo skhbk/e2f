@@ -5,6 +5,10 @@ e2f_controllers::gripper_command_controller:
 
   effort_tolerance: { type: double, default_value: 0.5 }
 
+  min_effort: { type: double, default_value: 1.0 }
+
+  max_effort: { type: double, default_value: 4.0 }
+
   pid:
     p: { type: double, default_value: 0.01 }
     i: { type: double, default_value: 0.05 }

@@ -14,6 +14,8 @@
 
 #include "e2f_controllers/gripper_command_controller.hpp"
 
+#include <algorithm>
+
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 
 namespace e2f_controllers
@@ -87,7 +89,8 @@ controller_interface::return_type GripperCommandController::update(
   const auto & position = state_interfaces_.at(0).get_value();
   const auto & effort = state_interfaces_.at(1).get_value();
 
-  const auto effort_error = effort - command->max_effort;
+  const auto effort_error =
+    effort - std::clamp(command->max_effort, params_.min_effort, params_.max_effort);
   const auto position_error = position - command->position;
 
   desired_position_ = command->position;
