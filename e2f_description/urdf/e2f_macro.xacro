@@ -8,7 +8,7 @@
       device_name:=/dev/ttyUSB0
       baud_rate:=57600
       dynamixel_id:=1
-      spring_constant:=12.0
+      spring_constant:=10.0
       active_joint_offset:=0.03
       filter_coefficient:=0.2"
   >
