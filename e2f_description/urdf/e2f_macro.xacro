@@ -214,6 +214,16 @@
       <origin xyz="8e-3 0 17e-3" rpy="0 0 0" />
     </joint>
 
+    <!-- Stroke -->
+    <link name="${tf_prefix}stroke_end" />
+    <joint name="${tf_prefix}stroke" type="prismatic">
+      <parent link="${tf_prefix}fingertip_r" />
+      <child link="${tf_prefix}stroke_end" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <axis xyz="1 0 0" />
+      <limit upper="0" lower="0" effort="0" velocity="0" />
+    </joint>
+
     <!-- TCP -->
     <link name="${tf_prefix}tcp" />
     <joint name="${tf_prefix}tcp_joint" type="prismatic">

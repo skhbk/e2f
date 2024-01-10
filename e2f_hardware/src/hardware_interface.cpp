@@ -83,8 +83,10 @@ std::vector<hardware_interface::StateInterface> E2FHardwareInterface::export_sta
     &joint_positions_[JointName::PASSIVE_R]);
 
   // Stroke interfaces
-  state_interfaces.emplace_back(tf_prefix + "stroke", "width", &stroke_position_);
-  state_interfaces.emplace_back(tf_prefix + "stroke", "force", &stroke_effort_);
+  state_interfaces.emplace_back(
+    tf_prefix + "stroke", hardware_interface::HW_IF_POSITION, &stroke_position_);
+  state_interfaces.emplace_back(
+    tf_prefix + "stroke", hardware_interface::HW_IF_EFFORT, &stroke_effort_);
 
   // TCP interface
   state_interfaces.emplace_back(
@@ -99,7 +101,8 @@ std::vector<hardware_interface::CommandInterface> E2FHardwareInterface::export_c
 
   const auto tf_prefix = info_.hardware_parameters.at("tf_prefix");
 
-  command_interfaces.emplace_back(tf_prefix + "stroke", "width", &stroke_position_command_);
+  command_interfaces.emplace_back(
+    tf_prefix + "stroke", hardware_interface::HW_IF_POSITION, &stroke_position_command_);
 
   return command_interfaces;
 }

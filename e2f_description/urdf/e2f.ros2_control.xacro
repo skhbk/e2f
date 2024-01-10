@@ -52,13 +52,15 @@
           <param name="initial_value">0.13</param>
         </state_interface>
       </joint>
-      <xacro:unless value="${use_fake_hardware}">
-        <gpio name="${tf_prefix}stroke">
-          <command_interface name="width" />
-          <state_interface name="width" />
-          <state_interface name="force" />
-        </gpio>
-      </xacro:unless>
+      <joint name="${tf_prefix}stroke">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">0.0</param>
+        </state_interface>
+        <state_interface name="effort">
+          <param name="initial_value">0.0</param>
+        </state_interface>
+      </joint>
     </ros2_control>
   </xacro:macro>
 </robot>
