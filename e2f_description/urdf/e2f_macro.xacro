@@ -41,21 +41,10 @@
       </collision>
     </link>
 
-    <link name="${tf_prefix}gear_l">
-      <visual>
-        <geometry>
-          <mesh filename="file://${description_package}/meshes/visual/gear_l.dae" />
-        </geometry>
-      </visual>
-    </link>
+    <link name="${tf_prefix}gear_l" />
 
-    <link name="${tf_prefix}gear_r">
-      <visual>
-        <geometry>
-          <mesh filename="file://${description_package}/meshes/visual/gear_r.dae" />
-        </geometry>
-      </visual>
-    </link>
+    <link name="${tf_prefix}gear_r" />
+
 
     <link name="${tf_prefix}link1_l">
       <visual>
