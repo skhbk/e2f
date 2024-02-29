@@ -9,6 +9,7 @@
       baud_rate:=57600
       dynamixel_id:=1
       spring_constant:=10.0
+      active_joint_offset:=0.0
       filter_coefficient:=0.2
       gain_p:=1.0
       gain_i:=0.0
