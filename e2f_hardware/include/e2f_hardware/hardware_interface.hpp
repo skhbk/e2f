@@ -34,7 +34,7 @@ class E2FHardwareInterface : public hardware_interface::SystemInterface
 
   // Interfaces
   std::map<JointName, double> joint_positions_;
-  double stroke_position_, stroke_effort_;
+  double stroke_position_, stroke_velocity_, stroke_effort_;
   double stroke_position_command_;
   double tcp_position_;
 

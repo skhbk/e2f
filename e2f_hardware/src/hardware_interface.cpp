@@ -86,6 +86,8 @@ std::vector<hardware_interface::StateInterface> E2FHardwareInterface::export_sta
   state_interfaces.emplace_back(
     tf_prefix + "stroke", hardware_interface::HW_IF_POSITION, &stroke_position_);
   state_interfaces.emplace_back(
+    tf_prefix + "stroke", hardware_interface::HW_IF_VELOCITY, &stroke_velocity_);
+  state_interfaces.emplace_back(
     tf_prefix + "stroke", hardware_interface::HW_IF_EFFORT, &stroke_effort_);
 
   // TCP interface
@@ -174,7 +176,9 @@ return_type E2FHardwareInterface::read(
       fk_pos_solvers_[i].JntToCart(q, frames[i]);
     }
 
+    const auto previous_stroke_position = stroke_position_;
     stroke_position_ = frames[0].p.x() - frames[1].p.x();
+    stroke_velocity_ = (stroke_position_ - previous_stroke_position) / period.seconds();
     tcp_position_ = (frames[0].p.z() + frames[1].p.z()) / 2;
   }
 
