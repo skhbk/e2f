@@ -29,6 +29,16 @@ CallbackReturn E2FHardwareInterface::on_init(const hardware_interface::HardwareI
   }
 
   stroke_position_command_ = std::numeric_limits<double>::quiet_NaN();
+  stroke_effort_command_ = std::numeric_limits<double>::quiet_NaN();
+
+  // Initialize PID
+  {
+    const auto p = std::stod(info_.hardware_parameters.at("gain_p"));
+    const auto i = std::stod(info_.hardware_parameters.at("gain_i"));
+    const auto d = std::stod(info_.hardware_parameters.at("gain_d"));
+    const auto i_clamp = std::stod(info_.hardware_parameters.at("gain_i_clamp"));
+    pid_.initPid(p, i, d, i_clamp, -i_clamp);
+  }
 
   const auto device_name = info_.hardware_parameters.at("device_name");
   const auto baud_rate = std::stoi(info_.hardware_parameters.at("baud_rate"));
@@ -105,6 +115,8 @@ std::vector<hardware_interface::CommandInterface> E2FHardwareInterface::export_c
 
   command_interfaces.emplace_back(
     tf_prefix + "stroke", hardware_interface::HW_IF_POSITION, &stroke_position_command_);
+  command_interfaces.emplace_back(
+    tf_prefix + "stroke", hardware_interface::HW_IF_EFFORT, &stroke_effort_command_);
 
   return command_interfaces;
 }
@@ -131,6 +143,8 @@ CallbackReturn E2FHardwareInterface::on_activate(const rclcpp_lifecycle::State &
     RCLCPP_ERROR(rclcpp::get_logger("E2FHardwareInterface"), e.what());
     return CallbackReturn::ERROR;
   }
+
+  pid_.reset();
 
   return CallbackReturn::SUCCESS;
 }
@@ -188,21 +202,36 @@ return_type E2FHardwareInterface::read(
       joint_positions_.at(JointName::ACTIVE), joint_positions_.at(JointName::PASSIVE_L));
     const auto effort_r = this->compute_force(
       joint_positions_.at(JointName::ACTIVE), joint_positions_.at(JointName::PASSIVE_R));
-    stroke_effort_ = std::max(effort_l, effort_r);
+    stroke_effort_ = std::max(std::max(effort_l, effort_r), 0.0);
+    if (stroke_effort_ < 1.0) {
+      stroke_effort_ *= stroke_effort_ / 1.0;
+    }
   }
 
   return return_type::OK;
 }
 
 return_type E2FHardwareInterface::write(
-  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
+  const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
-  if (!std::isfinite(stroke_position_command_)) {
+  double joint_position_command = 0;
+
+  if (std::isfinite(stroke_position_command_)) {
+    joint_position_command = this->stroke_ik(stroke_position_command_);
+
+  } else if (std::isfinite(stroke_effort_command_)) {
+    const auto stroke_effort_error = stroke_effort_command_ - stroke_effort_;
+    joint_position_command = joint_positions_.at(JointName::ACTIVE) +
+                             pid_.computeCommand(stroke_effort_error, period.nanoseconds());
+    const auto joint_offset = std::stod(info_.hardware_parameters.at("active_joint_offset"));
+    joint_position_command = std::max(joint_position_command, joint_offset);
+
+  } else {
     return return_type::OK;
   }
 
   try {
-    e2f_->write(stroke_ik(stroke_position_command_));
+    e2f_->write(joint_position_command);
   } catch (std::exception & e) {
     RCLCPP_ERROR(rclcpp::get_logger("E2FHardwareInterface"), e.what());
     return return_type::ERROR;

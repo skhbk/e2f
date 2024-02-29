@@ -19,6 +19,7 @@
 #include <string>
 #include <vector>
 
+#include "control_toolbox/pid.hpp"
 #include "e2f_hardware/e2f.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "kdl/chainfksolverpos_recursive.hpp"
@@ -35,11 +36,12 @@ class E2FHardwareInterface : public hardware_interface::SystemInterface
   // Interfaces
   std::map<JointName, double> joint_positions_;
   double stroke_position_, stroke_velocity_, stroke_effort_;
-  double stroke_position_command_;
+  double stroke_position_command_, stroke_effort_command_;
   double tcp_position_;
 
   std::vector<std::shared_ptr<KDL::Chain>> chains_;
   std::vector<KDL::ChainFkSolverPos_recursive> fk_pos_solvers_;
+  control_toolbox::Pid pid_;
   double moment_arm_;
   double reference_joint_position_;  // Angle of the finger link at the initial position
 

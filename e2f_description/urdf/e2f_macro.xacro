@@ -9,8 +9,12 @@
       baud_rate:=57600
       dynamixel_id:=1
       spring_constant:=10.0
-      active_joint_offset:=0.03
-      filter_coefficient:=0.2"
+      filter_coefficient:=0.2
+      gain_p:=1.0
+      gain_i:=0.0
+      gain_d:=0.0
+      gain_i_clamp:=0.0
+      "
   >
     <!-- ros2_control -->
     <xacro:include filename="$(find e2f_description)/urdf/e2f.ros2_control.xacro" />
@@ -24,6 +28,10 @@
       spring_constant="${spring_constant}"
       active_joint_offset="${active_joint_offset}"
       filter_coefficient="${filter_coefficient}"
+      gain_p="${gain_p}"
+      gain_i="${gain_i}"
+      gain_d="${gain_d}"
+      gain_i_clamp="${gain_i_clamp}"
     />
 
     <xacro:property name="description_package" value="$(find e2f_description)" />

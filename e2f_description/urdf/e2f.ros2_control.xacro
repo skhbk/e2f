@@ -11,6 +11,10 @@
       spring_constant
       active_joint_offset
       filter_coefficient
+      gain_p
+      gain_i
+      gain_d
+      gain_i_clamp
       "
   >
     <ros2_control name="${name}" type="system">
@@ -25,6 +29,10 @@
           <param name="spring_constant">${spring_constant}</param>
           <param name="active_joint_offset">${active_joint_offset}</param>
           <param name="filter_coefficient">${filter_coefficient}</param>
+          <param name="gain_p">${gain_p}</param>
+          <param name="gain_i">${gain_i}</param>
+          <param name="gain_d">${gain_d}</param>
+          <param name="gain_i_clamp">${gain_i_clamp}</param>
         </xacro:unless>
         <xacro:if value="${use_fake_hardware}">
           <plugin>mock_components/GenericSystem</plugin>
@@ -54,6 +62,7 @@
       </joint>
       <joint name="${tf_prefix}stroke">
         <command_interface name="position" />
+        <command_interface name="effort" />
         <state_interface name="position">
           <param name="initial_value">0.0</param>
         </state_interface>
