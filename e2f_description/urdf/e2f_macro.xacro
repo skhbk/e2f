@@ -210,7 +210,7 @@
       <child link="${tf_prefix}stroke_end" />
       <origin xyz="0 0 0" rpy="0 0 0" />
       <axis xyz="1 0 0" />
-      <limit upper="0" lower="0" effort="0" velocity="0" />
+      <limit upper="1.0" lower="-1.0" effort="1.0" velocity="1.0" />
     </joint>
 
     <!-- TCP -->
@@ -220,7 +220,7 @@
       <child link="${tf_prefix}tcp" />
       <origin xyz="0 0 0" rpy="0 0 0" />
       <axis xyz="0 0 1" />
-      <limit upper="0" lower="0.2" effort="0" velocity="0" />
+      <limit upper="1.0" lower="0" effort="1.0" velocity="1.0" />
     </joint>
   </xacro:macro>
 </robot>
